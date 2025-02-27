@@ -1,0 +1,118 @@
+import gradio as gr
+import google.generativeai as genai
+import os
+import PyPDF2
+import speech_recognition as sr
+from gtts import gTTS
+from dotenv import load_dotenv
+
+# Bellekte dosya içeriği ve türünü saklamak için değişkenler
+doc_memory = {"content": "", "type": ""}
+
+def process_file(file):
+    """Yüklenen dosyayı işler ve bellekte saklar."""
+    if not file:
+        return "⚠️ Lütfen bir dosya yükleyin."
+    
+    file_extension = os.path.splitext(file.name)[1].lower()
+    text = ""
+    
+    try:
+        if file_extension == ".pdf":
+            with open(file.name, "rb") as f:
+                reader = PyPDF2.PdfReader(f)
+                text = "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
+        elif file_extension == ".txt":
+            with open(file.name, "r", encoding="utf-8") as f:
+                text = f.read()
+        elif file_extension in [".mp3", ".wav"]:
+            recognizer = sr.Recognizer()
+            with sr.AudioFile(file.name) as source:
+                audio = recognizer.record(source)
+            text = recognizer.recognize_google(audio, language="tr-TR")
+        else:
+            return "❌ Desteklenmeyen dosya türü. Lütfen PDF, TXT veya ses dosyası yükleyin."
+        
+        if not text.strip():
+            return f"❌ {file_extension.upper()} dosyasından metin çıkarılamadı."
+        
+        doc_memory.update({"content": text, "type": file_extension[1:]})
+        print("Bellekteki içerik güncellendi:", doc_memory["content"][:200])  # İlk 200 karakteri göster
+        return f"✅ {file_extension.upper()} başarıyla işlendi! Sorularınızı sorabilirsiniz."
+    except Exception as e:
+        return f"❌ Dosya işlenirken hata oluştu: {str(e)}"
+
+def text_to_speech(text):
+    """Metni sese dönüştürür."""
+    try:
+        tts = gTTS(text, lang="tr")
+        audio_file = "output.mp3"
+        tts.save(audio_file)
+        return audio_file
+    except Exception as e:
+        return f"❌ Ses dosyası oluşturulurken hata oluştu: {str(e)}"
+
+# .env dosyasını yükle ve API anahtarını al
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    raise ValueError("GEMINI_API_KEY bulunamadı! Lütfen .env dosyanı kontrol et.")
+
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-pro")
+
+def ask_file_question(user_input):
+    """Kullanıcının sorularına cevap verir. Dosya varsa dosyaya dayalı, yoksa genel olarak cevap döndürür."""
+    try:
+        # Eğer dosya varsa dosya içeriğine dayalı bir cevap oluştur ama genel cevap da ver
+        if doc_memory["content"]:
+            prompt = (
+                f"Aşağıdaki metinle ilgili bir soru sorulmuşsa, metne dayanarak cevap ver. "
+                f"Eğer metinle ilgili değilse, soruyu genel bilgiye dayanarak yanıtla:\n\n"
+                f"{doc_memory['content']}\n\nSoru: {user_input}"
+            )
+        else:
+            prompt = user_input  # Dosya yoksa doğrudan modele sor
+        
+        response = model.generate_content(prompt)
+        
+        if not response or not response.text.strip():
+            return "❌ Modelden geçerli bir yanıt alınamadı."
+        
+        return response.text
+    except Exception as e:
+        return f"❌ Hata oluştu: {str(e)}"
+
+
+
+# Gradio Arayüzü
+with gr.Blocks() as interface:
+    gr.HTML("""
+        <div style='text-align: center;'>
+            <h1>📚 AI Destekli Dosya Sorgulama</h1>
+            <p>PDF, TXT veya ses dosyalarına dayalı sorularınızı sorabileceğiniz yapay zeka aracı.</p>
+        </div>
+    """)
+    
+    chat_history = gr.Chatbot(label="Sohbet Geçmişi")
+    file_input = gr.File(label="📂 Dosya Yükle", file_types=[".pdf", ".txt", ".mp3", ".wav"])
+    file_output = gr.Textbox(label="Durum", interactive=False)
+    file_process_button = gr.Button("📄 Dosyayı İşle")
+    
+    user_input = gr.Textbox(label="Sorunuzu Sorun", placeholder="Dosyadaki ana tema nedir?", lines=3)
+    submit_button = gr.Button("🚀 Gönder")
+    clear_button = gr.Button("🗑️ Sohbeti Temizle")
+    
+    file_process_button.click(process_file, inputs=[file_input], outputs=[file_output])
+    
+    def respond(message, history):
+        reply = ask_file_question(message)
+        print(f"Soru: {message}\nYanıt: {reply}")  # Debugging için çıktı al
+        history.append((message, reply))
+        return history, ""
+    
+    submit_button.click(respond, inputs=[user_input, chat_history], outputs=[chat_history, user_input])
+    clear_button.click(lambda: [], outputs=[chat_history])
+
+if __name__ == "__main__":
+    interface.launch()
