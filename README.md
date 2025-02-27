@@ -51,9 +51,6 @@ python app.py
 ## 📜 Lisans
 Bu proje **MIT** lisansı ile lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasına göz atabilirsiniz.
 
-## 🤝 Katkıda Bulunma
-Katkıda bulunmak isterseniz, `pull request` gönderebilir veya hata bildiriminde bulunabilirsiniz.
-
 ---
 📧 Sorularınız için: altugikiz10@gmail.com
 
