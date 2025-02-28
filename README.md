@@ -1,39 +1,82 @@
-PDF Converter Chatbot
-📌 Proje Açıklaması
-PDF Converter Chatbot, kullanıcıların PDF dosyalarını kolayca farklı formatlara dönüştürmesine yardımcı olan bir sohbet botudur. Python ile geliştirilmiş olup, makine öğrenimi ve doğal dil işleme (NLP) teknikleriyle desteklenmiştir. Kullanıcı dostu bir arayüz sunarak, etkileşimli bir deneyim sağlamayı amaçlar.
+## 📌 PDF Converter Chatbot
 
-🚀 Özellikler
-📄 PDF dosyalarını farklı formatlara (TXT, DOCX, PNG vb.) dönüştürme
-🤖 Chatbot entegrasyonu ile etkileşimli kullanım
-🔍 OCR desteği ile taranmış belgeleri metne çevirme
-🌍 Çoklu dil desteği
-☁️ Bulut entegrasyonu (Opsiyonel)
-🛠 Kullanılan Teknolojiler
-Python 🐍
-Flask (Web API için)
-PyMuPDF / pdf2image (PDF işleme için)
-NLTK / spaCy (Doğal Dil İşleme için)
-Tesseract OCR (Optik Karakter Tanıma için)
-🔧 Kurulum
-Projeyi yerel ortamınıza kurmak için aşağıdaki adımları takip edin:
+**Proje Açıklaması:**  
+PDF Converter Chatbot, kullanıcıların PDF dosyalarını kolayca farklı formatlara dönüştürmesini sağlayan bir sohbet botudur. Python ile geliştirilmiş olup, makine öğrenimi ve doğal dil işleme (NLP) tekniklerinden yararlanır. Kullanıcı dostu bir arayüz sunarak, etkileşimli bir deneyim sağlamayı hedefler.
 
-1️⃣ Gerekli Bağımlılıkları Kurun
+---
+
+## 🚀 Özellikler
+- 📂 **PDF dosyalarını farklı formatlara dönüştürme** (TXT, DOCX, PNG vb.)
+- 🤖 **Chatbot entegrasyonu** ile etkileşimli kullanım
+- 🔍 **OCR desteği** sayesinde taranmış belgeleri metne çevirme
+- 🌍 **Çoklu dil desteği**
+- ☁️ **Bulut entegrasyonu** (Opsiyonel)
+
+---
+
+## 🛠️ Kullanılan Teknolojiler
+- **Python**
+- **Flask** (Web API için)
+- **PyMuPDF / pdf2image** (PDF işleme için)
+- **NLTK / spaCy** (Doğal Dil İşleme için)
+- **Tesseract OCR** (Optik Karakter Tanıma için)
+
+---
+
+## ⚙️ Kurulum & Kullanım
+
+### 1. **Gerekli Bağımlılıkları Kurun**
+Öncelikle, projenin çalışması için gerekli bağımlılıkları yükleyin:
+
+```bash
 pip install -r requirements.txt
-2️⃣ Tesseract OCR Kurulumu (Opsiyonel)
-Eğer OCR özelliğini kullanacaksanız, Tesseract'ı sisteminize kurmalısınız.
+```
 
-Windows için: Tesseract Kurulumu
-Linux için:
+### 2. **Tesseract OCR Kurulumu (Opsiyonel)**
+Eğer OCR özelliğini kullanmak istiyorsanız, sisteminize Tesseract'ı kurmalısınız.
+
+#### - **Windows İçin:**
+Tesseract’ı Windows’a kurmak için aşağıdaki bağlantıyı kullanarak indirip yükleyin:  
+🔗 [Tesseract İndir](https://github.com/UB-Mannheim/tesseract/wiki)
+
+#### - **Linux İçin:**
+Aşağıdaki komutu terminalde çalıştırarak yükleyebilirsiniz:
+```bash
 sudo apt install tesseract-ocr
-macOS için:
-brew install tesseract
-3️⃣ Uygulamayı Çalıştırın
-python app.py
-📌 Kullanım
-Sohbet botu aracılığıyla PDF yükleyin.
-Dönüştürmek istediğiniz formatı seçin.
-Çıktıyı indirin veya doğrudan e-posta ile paylaşın.
-📜 Lisans
-Bu proje MIT lisansı ile lisanslanmıştır. Daha fazla bilgi için LICENSE dosyasına göz atabilirsiniz.
+```
 
-📧 Sorularınız için: altugikiz10@gmail.com
+#### - **macOS İçin:**
+Homebrew kullanarak Tesseract’ı yüklemek için:
+```bash
+brew install tesseract
+```
+
+### 3. **Uygulamayı Çalıştırın**
+Projeyi başlatmak için aşağıdaki komutu kullanın:
+```bash
+python app.py
+```
+
+### 4. **Kullanım**
+📂 **Sohbet botu aracılığıyla PDF yükleyin.**  
+🔄 **Dönüştürmek istediğiniz formatı seçin.** (TXT, DOCX, PNG vb.)  
+📥 **Çıktıyı indirin veya doğrudan e-posta ile paylaşın.**  
+
+---
+
+## 📜 **Lisans:** 
+Bu proje **MIT Lisansı** ile lisanslanmıştır. Daha fazla bilgi için `LICENSE` dosyasını inceleyebilirsiniz.
+
+---
+
+## 📩 **Sorularınız için:** 
+[altugkiz10@gmail.com](mailto:altugkiz10@gmail.com)
+
+
+
+
+
+
+
+
+
